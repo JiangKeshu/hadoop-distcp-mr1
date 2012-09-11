@@ -22,11 +22,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.JobSubmissionFiles;
@@ -173,10 +171,10 @@ public class DistCp extends Configured implements Tool {
    */
   private Job createJob() throws IOException {
     String jobName = "distcp";
-    String userChosenName = getConf().get("mapred.job.name");
+    String userChosenName = getConf().get(JobContext.JOB_NAME);
     if (userChosenName != null)
       jobName += ": " + userChosenName;
-    Job job = new Job(getConf());
+    Job job = Job.getInstance(getConf());
     job.setJobName(jobName);
     job.setInputFormatClass(DistCpUtils.getStrategy(getConf(), inputOptions));
     job.setJarByClass(CopyMapper.class);
@@ -187,8 +185,8 @@ public class DistCp extends Configured implements Tool {
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(Text.class);
     job.setOutputFormatClass(CopyOutputFormat.class);
-    job.getConfiguration().set("mapred.map.tasks.speculative.execution", "false");
-    job.getConfiguration().set("mapred.map.tasks",
+    job.getConfiguration().set(JobContext.MAP_SPECULATIVE, "false");
+    job.getConfiguration().set(JobContext.NUM_MAPS,
                   String.valueOf(inputOptions.getMaxMaps()));
 
     if (inputOptions.getSslConfigurationFile() != null) {
@@ -233,20 +231,20 @@ public class DistCp extends Configured implements Tool {
 
     Path localStorePath = getLocalStorePath(sslConf,
                             DistCpConstants.CONF_LABEL_SSL_TRUST_STORE_LOCATION);
-    DistributedCache.addCacheFile(localStorePath.makeQualified(localFS.getUri(),
-                                      localFS.getWorkingDirectory()).toUri(), sslConf);
+    job.addCacheFile(localStorePath.makeQualified(localFS.getUri(),
+                                      localFS.getWorkingDirectory()).toUri());
     configuration.set(DistCpConstants.CONF_LABEL_SSL_TRUST_STORE_LOCATION,
                       localStorePath.getName());
 
     localStorePath = getLocalStorePath(sslConf,
                              DistCpConstants.CONF_LABEL_SSL_KEY_STORE_LOCATION);
-    DistributedCache.addCacheFile(localStorePath.makeQualified(localFS.getUri(),
-                                      localFS.getWorkingDirectory()).toUri(), sslConf);
+    job.addCacheFile(localStorePath.makeQualified(localFS.getUri(),
+                                      localFS.getWorkingDirectory()).toUri());
     configuration.set(DistCpConstants.CONF_LABEL_SSL_KEY_STORE_LOCATION,
                                       localStorePath.getName());
 
-    DistributedCache.addCacheFile(sslConfigPath.makeQualified(localFS.getUri(),
-                                      localFS.getWorkingDirectory()).toUri(), sslConf);
+    job.addCacheFile(sslConfigPath.makeQualified(localFS.getUri(),
+                                      localFS.getWorkingDirectory()).toUri());
 
   }
 
@@ -347,7 +345,7 @@ public class DistCp extends Configured implements Tool {
   private Path createMetaFolderPath() throws Exception {
     Configuration configuration = getConf();
     Path stagingDir = JobSubmissionFiles.getStagingDir(
-            new JobClient(configuration), configuration);
+            new Cluster(configuration), configuration);
     Path metaFolderPath = new Path(stagingDir, PREFIX + String.valueOf(rand.nextInt()));
     if (LOG.isDebugEnabled())
       LOG.debug("Meta folder location: " + metaFolderPath);
@@ -408,6 +406,7 @@ public class DistCp extends Configured implements Tool {
       this.distCp = distCp;
     }
 
+    @Override
     public void run() {
       if (distCp.isSubmitted()) return;
 

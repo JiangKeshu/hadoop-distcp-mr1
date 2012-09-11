@@ -55,7 +55,7 @@ public class TestCopyCommitter {
   private static MiniDFSCluster cluster;
 
   private static Job getJobForClient() throws IOException {
-    Job job = new Job(new Configuration());
+    Job job = Job.getInstance(new Configuration());
     job.getConfiguration().set("mapred.job.tracker", "localhost:" + PORT);
     job.setInputFormatClass(NullInputFormat.class);
     job.setOutputFormatClass(NullOutputFormat.class);

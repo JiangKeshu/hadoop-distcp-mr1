@@ -62,7 +62,7 @@ public class UniformSizeInputFormat extends InputFormat<Text, FileStatus> {
                       throws IOException, InterruptedException {
     Configuration configuration = context.getConfiguration();
     int numSplits = DistCpUtils.getInt(configuration,
-                                       "mapred.map.tasks");
+                                       JobContext.NUM_MAPS);
 
     if (numSplits == 0) return new ArrayList<InputSplit>();
 

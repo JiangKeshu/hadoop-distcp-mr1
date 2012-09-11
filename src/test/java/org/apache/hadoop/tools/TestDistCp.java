@@ -25,7 +25,6 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IOUtils;
-import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.MiniMRCluster;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobSubmissionFiles;
@@ -181,7 +180,7 @@ public class TestDistCp {
       DistCpOptions options = new DistCpOptions(sources, targetPath);
 
       Path stagingDir = JobSubmissionFiles.getStagingDir(
-              new JobClient(configuration), configuration);
+              new Cluster(configuration), configuration);
       stagingDir.getFileSystem(configuration).mkdirs(stagingDir);
 
       try {
