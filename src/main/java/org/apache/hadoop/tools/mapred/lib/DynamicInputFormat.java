@@ -85,7 +85,7 @@ public class DynamicInputFormat<K, V> extends InputFormat<K, V> {
     List<InputSplit> splits = new ArrayList<InputSplit>(nSplits);
     
     for (int i=0; i< nSplits; ++i) {
-      TaskID taskId = new TaskID(jobContext.getJobID(), TaskType.MAP, i);
+      TaskID taskId = new TaskID(jobContext.getJobID(), true, i);
       chunks.get(i).assignTo(taskId);
       splits.add(new FileSplit(chunks.get(i).getPath(), 0,
           // Setting non-zero length for FileSplit size, to avoid a possible
@@ -231,7 +231,7 @@ public class DynamicInputFormat<K, V> extends InputFormat<K, V> {
 
   private static int getNumMapTasks(Configuration configuration) {
     return DistCpUtils.getInt(configuration,
-                              JobContext.NUM_MAPS);
+                              "mapred.map.tasks");
   }
 
   private static int getListingSplitRatio(Configuration configuration,

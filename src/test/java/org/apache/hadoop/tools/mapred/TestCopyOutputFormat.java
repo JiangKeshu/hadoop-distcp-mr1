@@ -37,7 +37,7 @@ public class TestCopyOutputFormat {
   @Test
   public void testSetCommitDirectory() {
     try {
-      Job job = Job.getInstance(new Configuration());
+      Job job = new Job(new Configuration());
       Assert.assertEquals(null, CopyOutputFormat.getCommitDirectory(job));
 
       job.getConfiguration().set(DistCpConstants.CONF_LABEL_TARGET_FINAL_PATH, "");
@@ -57,7 +57,7 @@ public class TestCopyOutputFormat {
   @Test
   public void testSetWorkingDirectory() {
     try {
-      Job job = Job.getInstance(new Configuration());
+      Job job = new Job(new Configuration());
       Assert.assertEquals(null, CopyOutputFormat.getWorkingDirectory(job));
 
       job.getConfiguration().set(DistCpConstants.CONF_LABEL_TARGET_WORK_PATH, "");
@@ -91,7 +91,7 @@ public class TestCopyOutputFormat {
   public void testCheckOutputSpecs() {
     try {
       OutputFormat outputFormat = new CopyOutputFormat();
-      Job job = Job.getInstance(new Configuration());
+      Job job = new Job(new Configuration());
       JobID jobID = new JobID("200707121733", 1);
 
       try {

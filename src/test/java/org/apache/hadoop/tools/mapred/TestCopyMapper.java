@@ -285,7 +285,6 @@ public class TestCopyMapper {
       
       final Mapper<Text, FileStatus, Text, Text>.Context context =  tmpUser.
           doAs(new PrivilegedAction<Mapper<Text, FileStatus, Text, Text>.Context>() {
-        @Override
         public Mapper<Text, FileStatus, Text, Text>.Context run() {
           try {
             StubContext stubContext = new StubContext(getConfiguration(), null, 0);
@@ -308,7 +307,6 @@ public class TestCopyMapper {
       cluster.getFileSystem().setPermission(new Path(TARGET_PATH), new FsPermission((short)511));
 
       final FileSystem tmpFS = tmpUser.doAs(new PrivilegedAction<FileSystem>() {
-        @Override
         public FileSystem run() {
           try {
             return FileSystem.get(configuration);
@@ -321,7 +319,6 @@ public class TestCopyMapper {
       });
 
       tmpUser.doAs(new PrivilegedAction<Integer>() {
-        @Override
         public Integer run() {
           try {
             copyMapper.setup(context);
@@ -355,7 +352,6 @@ public class TestCopyMapper {
 
       final Mapper<Text, FileStatus, Text, Text>.Context context =  tmpUser.
           doAs(new PrivilegedAction<Mapper<Text, FileStatus, Text, Text>.Context>() {
-        @Override
         public Mapper<Text, FileStatus, Text, Text>.Context run() {
           try {
             StubContext stubContext = new StubContext(getConfiguration(), null, 0);
@@ -374,7 +370,6 @@ public class TestCopyMapper {
       cluster.getFileSystem().setPermission(new Path(TARGET_PATH), new FsPermission((short)511));
 
       final FileSystem tmpFS = tmpUser.doAs(new PrivilegedAction<FileSystem>() {
-        @Override
         public FileSystem run() {
           try {
             return FileSystem.get(configuration);
@@ -387,7 +382,6 @@ public class TestCopyMapper {
       });
 
       tmpUser.doAs(new PrivilegedAction<Integer>() {
-        @Override
         public Integer run() {
           try {
             copyMapper.setup(context);
@@ -418,7 +412,6 @@ public class TestCopyMapper {
 
       final StubContext stubContext =  tmpUser.
           doAs(new PrivilegedAction<StubContext>() {
-        @Override
         public StubContext run() {
           try {
             return new StubContext(getConfiguration(), null, 0);
@@ -444,7 +437,6 @@ public class TestCopyMapper {
           new FsPermission(FsAction.READ, FsAction.READ, FsAction.READ));
 
       final FileSystem tmpFS = tmpUser.doAs(new PrivilegedAction<FileSystem>() {
-        @Override
         public FileSystem run() {
           try {
             return FileSystem.get(configuration);
@@ -457,7 +449,6 @@ public class TestCopyMapper {
       });
 
       tmpUser.doAs(new PrivilegedAction<Integer>() {
-        @Override
         public Integer run() {
           try {
             copyMapper.setup(context);
@@ -492,7 +483,6 @@ public class TestCopyMapper {
 
       final StubContext stubContext =  tmpUser.
           doAs(new PrivilegedAction<StubContext>() {
-        @Override
         public StubContext run() {
           try {
             return new StubContext(getConfiguration(), null, 0);
@@ -522,7 +512,6 @@ public class TestCopyMapper {
           new FsPermission(FsAction.READ, FsAction.READ, FsAction.READ));
 
       final FileSystem tmpFS = tmpUser.doAs(new PrivilegedAction<FileSystem>() {
-        @Override
         public FileSystem run() {
           try {
             return FileSystem.get(configuration);
@@ -535,7 +524,7 @@ public class TestCopyMapper {
       });
 
       tmpUser.doAs(new PrivilegedAction<Integer>() {
-        @Override
+
         public Integer run() {
           try {
             copyMapper.setup(context);

@@ -112,7 +112,7 @@ public class CopyMapper extends Mapper<Text, FileStatus, Text, Text> {
   private void initializeSSLConf(Context context) throws IOException {
     LOG.info("Initializing SSL configuration");
     
-    String workDir = conf.get(JobContext.JOB_LOCAL_DIR) + "/work";
+    String workDir = conf.get("mapred.job.local.dir") + "/work";
     Path[] cacheFiles = context.getLocalCacheFiles();
 
     Configuration sslConfig = new Configuration(false);

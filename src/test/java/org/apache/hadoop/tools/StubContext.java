@@ -98,11 +98,6 @@ public class StubContext {
     public void progress() {}
 
     @Override
-    public float getProgress() {
-      return 0F;
-    }
-
-    @Override
     public void setStatus(String status) {}
   }
 
